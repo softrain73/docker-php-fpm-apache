@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+   php:
+      build:
+        context: './php/'
+        args:
+          PHP_VERSION: ${PHP_VERSION}
+      networks:
+        - backend
+      volumes:
+        - /home/ims.laravel.local/:/var/www/html/
+      container_name: "${PHP_NAME}"
+   
+   apache:
+      build:
+        context: './apache/'
+        args:
+          APACHE_VERSION: ${APACHE_VERSION}
+      depends_on:
+        - php
+      networks:
+        - backend
+        - frontend
+      ports:
+        - "80:80"
+      volumes:
+        - /home/ims.laravel.local/:/var/www/html/
+      container_name: "${APACHE_NAME}"
+networks:
+   backend:
+   frontend:
